@@ -43,6 +43,12 @@ To use mim-tRNAseq, it is recommended to install the package using `conda`, pref
 	mamba install -c bioconda mimseq
 ```
 
+Sometimes using `mamba` we have noticed that very old versions of `mimseq` are installed. Please check using `mimseq --version` that you have the latest [version](https://github.com/nedialkova-lab/mim-tRNAseq/blob/master/mimseq/version.py) installed. If not, try running the following in your `mimseq` environment: 
+```
+mamba install mimseq=VERSION
+#replace VERSION with version number, e.g., mimseq=1.3.9
+```
+
 usearch needs to be acquired and installed. Please do the following:
 ```bash
 	wget https://drive5.com/downloads/usearch10.0.240_i86linux32.gz
