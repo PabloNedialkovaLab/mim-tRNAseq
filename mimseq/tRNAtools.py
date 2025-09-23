@@ -272,7 +272,7 @@ def modificationParser(modifications_table, fetch):
 	if fetch:
 		log.info("Parsing Modification JSON data...")
 		for data in modifications_table.values():
-			modifications[data["abbrev"].strip()] = {'name':data["name"].strip(), 'abbr':data["short_name"].strip(), 'ref':data["reference_moiety"][0].strip()}
+			modifications[data["new_abbrev"].strip()] = {'name':data["name"].strip(), 'abbr':data["short_name"].strip(), 'ref':data["reference_moiety"][0].strip()}
 		
 	elif not fetch:
 		log.info("Parsing local Modification data...")
