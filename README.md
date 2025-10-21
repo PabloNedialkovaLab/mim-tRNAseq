@@ -40,7 +40,7 @@ To use mim-tRNAseq, it is recommended to install the package using `conda`, pref
 ```bash
 	conda create -n mimseq python=3.7
 	conda activate mimseq
-	mamba install -c bioconda mimseq
+	mamba install -c conda-forge -c bioconda mimseq
 ```
 
 Sometimes using `mamba` we have noticed that very old versions of `mimseq` are installed. Please check using `mimseq --version` that you have the latest [version](https://github.com/nedialkova-lab/mim-tRNAseq/blob/master/mimseq/version.py) installed. If not, try running the following in your `mimseq` environment: 
