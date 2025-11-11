@@ -8,7 +8,7 @@ To use mim-tRNAseq, it is recommended to install the package using `conda`, pref
 ::
 	conda create -n mimseq python=3.7
 	conda activate mimseq
-	mamba install -c bioconda mimseq
+	mamba install -c conda-forge -c bioconda mimseq
 
 usearch needs to be acquired and installed. Please do the following:
 ::
