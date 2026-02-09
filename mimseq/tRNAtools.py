@@ -15,6 +15,7 @@ import pandas as pd
 import requests
 from requests.models import HTTPError
 from .ssAlign import aligntRNA, extraCCA, tRNAclassifier, tRNAclassifier_nogaps, getAnticodon, clusterAnticodon
+import unicodedata
 
 log = logging.getLogger(__name__)
 
@@ -265,15 +266,24 @@ def getModifications(local_mod):
 	return modifications, fetch
 
 def modificationParser(modifications_table, fetch):
-	# Read in modifications and build dictionary
+    # Read in modifications and build dictionary
 
 	modifications = {}
 
 	if fetch:
 		log.info("Parsing Modification JSON data...")
 		for data in modifications_table.values():
-			modifications[data["new_abbrev"].strip()] = {'name':data["name"].strip(), 'abbr':data["short_name"].strip(), 'ref':data["reference_moiety"][0].strip()}
-		
+			key = unicodedata.normalize(
+                    "NFKC", 
+                    data["new_abbrev"].strip()
+                    )
+
+			modifications[key] = {
+                    'name':data["name"].strip(),
+                    'abbr':data["short_name"].strip(), 
+                    'ref':data["reference_moiety"][0].strip()
+                    }
+            
 	elif not fetch:
 		log.info("Parsing local Modification data...")
 		for line in modifications_table:
@@ -283,9 +293,14 @@ def modificationParser(modifications_table, fetch):
 				if not ref or ref.isspace():
 					ref = 'N'
 				if mod and not mod.isspace():
-					modifications[mod.strip()] = {'name':name.strip(), 'abbr':abbr.strip(), 'ref':ref.strip()}
+					key = unicodedata.normalize("NFKC", mod.strip())
+					modifications[key] = {
+                            'name':name.strip(), 
+                            'abbr':abbr.strip(), 
+                            'ref':ref.strip()
+                            }
 
-	return(modifications)
+	return modifications
 
 def getUnmodSeq(seq, modification_table):
 # Change modified bases into standard ACGT in input sequence
@@ -293,7 +308,10 @@ def getUnmodSeq(seq, modification_table):
 	new_seq = []
 	for char in seq:
 		# for insertions ('_') make reference N - this is not described in the modifications table
-		if char == '_':
+		if char == '_': 
+			char = 'N'
+		elif char not in modification_table:
+			log.info(f"Unknown modification {char} found - changing to N")
 			char = 'N'
 		else:
 			char = modification_table[char]['ref']
